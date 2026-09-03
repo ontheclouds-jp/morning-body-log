@@ -22,6 +22,7 @@ import {
 import {
   BOWEL_CONDITIONS,
   FATIGUE_LEVELS,
+  HEADACHE_SEVERITIES,
   PAIN_LEVELS,
   PAIN_LOCATIONS,
   TEXT_LIMITS,
@@ -30,20 +31,22 @@ import type {
   BowelCondition,
   DailyRecordInput,
   FatigueLevel,
+  HeadacheSeverity,
   PainLevel,
   PainLocation,
 } from "@/lib/types";
-import { formatJapaneseDate } from "@/lib/format";
+import { formatJapaneseDate, headacheSeverityLabel } from "@/lib/format";
 import { Button } from "@/components/ui/Button";
 import { NumberField } from "@/components/ui/NumberField";
 import { SelectCards } from "@/components/ui/SelectCards";
 import { MultiSelectChips } from "@/components/ui/MultiSelectChips";
 import { TextAreaField } from "@/components/ui/TextAreaField";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { BottomActionBar } from "@/components/ui/BottomActionBar";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Card } from "@/components/ui/Card";
 
-const STEP_COUNT = 8;
+const STEP_COUNT = 9;
 
 interface FormState {
   weightKg: string;
@@ -54,6 +57,9 @@ interface FormState {
   painLevel?: PainLevel;
   painLocations: PainLocation[];
   painNote: string;
+  headacheFlag: boolean;
+  headacheSeverity?: HeadacheSeverity;
+  headacheNote: string;
   healthNote: string;
   scheduleNote: string;
 }
@@ -67,6 +73,9 @@ const emptyForm: FormState = {
   painLevel: undefined,
   painLocations: [],
   painNote: "",
+  headacheFlag: false,
+  headacheSeverity: undefined,
+  headacheNote: "",
   healthNote: "",
   scheduleNote: "",
 };
@@ -92,6 +101,11 @@ function buildInput(
     painLevel: form.painLevel,
     painLocations: form.painLocations.length ? form.painLocations : undefined,
     painNote: form.painNote.trim() || undefined,
+    headacheFlag: form.headacheFlag,
+    headacheSeverity: form.headacheFlag ? form.headacheSeverity : undefined,
+    headacheNote: form.headacheFlag
+      ? form.headacheNote.trim() || undefined
+      : undefined,
     healthNote: form.healthNote.trim() || undefined,
     scheduleNote: form.scheduleNote.trim() || undefined,
   };
@@ -143,6 +157,9 @@ function RecordWizard() {
           painLevel: existing.painLevel,
           painLocations: existing.painLocations ?? [],
           painNote: existing.painNote ?? "",
+          headacheFlag: existing.headacheFlag ?? false,
+          headacheSeverity: existing.headacheSeverity,
+          headacheNote: existing.headacheNote ?? "",
           healthNote: existing.healthNote ?? "",
           scheduleNote: existing.scheduleNote ?? "",
         });
@@ -401,6 +418,50 @@ function RecordWizard() {
         )}
 
         {step === 7 && (
+          <StepShell question="頭痛はありますか">
+            <Checkbox
+              checked={form.headacheFlag}
+              onChange={(checked) =>
+                updateForm(
+                  checked
+                    ? { headacheFlag: true }
+                    : {
+                        headacheFlag: false,
+                        headacheSeverity: undefined,
+                        headacheNote: "",
+                      },
+                )
+              }
+              label="頭痛がある"
+            />
+            {form.headacheFlag && (
+              <div className="mt-5">
+                <p className="mb-2 text-base font-medium text-zinc-700 dark:text-zinc-300">
+                  頭痛の強さ
+                </p>
+                <SelectCards
+                  options={HEADACHE_SEVERITIES.map((h) => ({
+                    value: h.value,
+                    label: h.label,
+                  }))}
+                  value={form.headacheSeverity}
+                  onChange={(v) => updateForm({ headacheSeverity: v })}
+                />
+                <div className="mt-4">
+                  <TextAreaField
+                    value={form.headacheNote}
+                    onChange={(v) => updateForm({ headacheNote: v })}
+                    maxLength={TEXT_LIMITS.headacheNote}
+                    placeholder="場所・状況・服薬の有無など（任意）"
+                    rows={3}
+                  />
+                </div>
+              </div>
+            )}
+          </StepShell>
+        )}
+
+        {step === 8 && (
           <StepShell question="今日の体調について、気になることはありますか">
             <TextAreaField
               value={form.healthNote}
@@ -413,7 +474,7 @@ function RecordWizard() {
           </StepShell>
         )}
 
-        {step === 8 && (
+        {step === 9 && (
           <StepShell question="今日の予定を教えてください（任意）">
             <TextAreaField
               value={form.scheduleNote}
@@ -510,6 +571,12 @@ function ConfirmStep({ date, form }: { date: string; form: FormState }) {
       PAIN_LEVELS.find((p) => p.value === form.painLevel)?.label ?? "未入力",
     ],
     ["痛みの場所", form.painLocations.join("、") || "-"],
+    [
+      "頭痛",
+      form.headacheFlag
+        ? `あり（${headacheSeverityLabel(form.headacheSeverity) || "強さ未選択"}）`
+        : "なし",
+    ],
     ["体調メモ", form.healthNote || "未入力"],
     ["今日の予定", form.scheduleNote || "未入力"],
   ];

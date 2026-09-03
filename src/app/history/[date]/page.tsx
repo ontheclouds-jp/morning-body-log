@@ -8,7 +8,12 @@ import { db } from "@/lib/db";
 import { deleteRecord, getAdjacentDate } from "@/lib/records";
 import { diffFromPrevious, sevenDayAverage } from "@/lib/calculations";
 import { todayDateString } from "@/lib/validation";
-import { formatJapaneseDate, formatSignedNumber } from "@/lib/format";
+import {
+  formatJapaneseDate,
+  formatSignedNumber,
+  headacheBadgeClasses,
+  headacheSeverityLabel,
+} from "@/lib/format";
 import { FATIGUE_LEVELS, PAIN_LEVELS } from "@/lib/constants";
 import { WARNING_MESSAGE } from "@/lib/comments";
 import { Button } from "@/components/ui/Button";
@@ -175,6 +180,28 @@ export default function RecordDetailPage() {
           extra={record.painLocations?.join("、")}
           note={record.painNote}
         />
+        <div>
+          <p className="text-sm text-zinc-500">頭痛</p>
+          {record.headacheFlag ? (
+            <>
+              <span
+                className={`mt-1 inline-flex w-fit items-center gap-1 rounded-full border px-2 py-0.5 text-sm font-medium ${headacheBadgeClasses(record.headacheSeverity)}`}
+              >
+                <span aria-hidden>🤕</span>
+                {headacheSeverityLabel(record.headacheSeverity) || "あり"}
+              </span>
+              {record.headacheNote && (
+                <p className="mt-1 whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">
+                  {record.headacheNote}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="mt-1 text-base text-zinc-800 dark:text-zinc-100">
+              なし
+            </p>
+          )}
+        </div>
         <DetailRow label="体調メモ" value={record.healthNote} />
         <DetailRow label="今日の予定" value={record.scheduleNote} />
       </Card>

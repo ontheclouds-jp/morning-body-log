@@ -21,6 +21,14 @@ export const PAIN_LEVELS = [
   { value: 3, label: "強い痛み" },
 ] as const;
 
+export const HEADACHE_SEVERITIES = [
+  { value: 0, label: "なし" },
+  { value: 1, label: "軽い" },
+  { value: 2, label: "普通" },
+  { value: 3, label: "強い" },
+  { value: 4, label: "非常に強い" },
+] as const;
+
 export const PAIN_LOCATIONS = [
   "頭",
   "首",
@@ -45,6 +53,7 @@ export const TEXT_LIMITS = {
   breakfastText: 500,
   healthNote: 1000,
   painNote: 500,
+  headacheNote: 500,
   scheduleNote: 500,
 } as const;
 
@@ -55,4 +64,4 @@ export const BODY_FAT_PLAUSIBLE_MAX = 60;
 export const WEIGHT_LARGE_CHANGE_KG = 3;
 export const BODY_FAT_LARGE_CHANGE_PERCENT = 5;
 
-export const INPUT_STEP_COUNT = 8;
+export const INPUT_STEP_COUNT = 9;

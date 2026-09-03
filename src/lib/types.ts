@@ -3,6 +3,7 @@ import type {
   FATIGUE_LEVELS,
   PAIN_LEVELS,
   PAIN_LOCATIONS,
+  HEADACHE_SEVERITIES,
   GRAPH_PERIODS,
 } from "./constants";
 
@@ -10,6 +11,7 @@ export type BowelCondition = (typeof BOWEL_CONDITIONS)[number];
 export type FatigueLevel = (typeof FATIGUE_LEVELS)[number]["value"];
 export type PainLevel = (typeof PAIN_LEVELS)[number]["value"];
 export type PainLocation = (typeof PAIN_LOCATIONS)[number];
+export type HeadacheSeverity = (typeof HEADACHE_SEVERITIES)[number]["value"];
 export type GraphPeriod = (typeof GRAPH_PERIODS)[number]["value"];
 
 export interface DailyRecord {
@@ -23,6 +25,9 @@ export interface DailyRecord {
   painLevel?: PainLevel;
   painLocations?: PainLocation[];
   painNote?: string;
+  headacheFlag?: boolean;
+  headacheSeverity?: HeadacheSeverity;
+  headacheNote?: string;
   healthNote?: string;
   scheduleNote?: string;
   generatedComment?: string;

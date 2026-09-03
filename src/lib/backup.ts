@@ -2,7 +2,7 @@ import { z } from "zod";
 import { db } from "./db";
 import { getRecordByDate } from "./records";
 import { BOWEL_CONDITIONS, PAIN_LOCATIONS } from "./constants";
-import type { DailyRecord, FatigueLevel, PainLevel } from "./types";
+import type { DailyRecord, FatigueLevel, HeadacheSeverity, PainLevel } from "./types";
 
 const backupRecordSchema = z.object({
   id: z.string().optional(),
@@ -15,6 +15,9 @@ const backupRecordSchema = z.object({
   painLevel: z.number().min(0).max(3).optional(),
   painLocations: z.array(z.enum(PAIN_LOCATIONS)).optional(),
   painNote: z.string().optional(),
+  headacheFlag: z.boolean().optional(),
+  headacheSeverity: z.number().min(0).max(4).optional(),
+  headacheNote: z.string().optional(),
   healthNote: z.string().optional(),
   scheduleNote: z.string().optional(),
   generatedComment: z.string().optional(),
@@ -74,6 +77,9 @@ export function parseBackupJson(text: string): ParseBackupResult {
     painLevel: r.painLevel as PainLevel | undefined,
     painLocations: r.painLocations,
     painNote: r.painNote,
+    headacheFlag: r.headacheFlag,
+    headacheSeverity: r.headacheSeverity as HeadacheSeverity | undefined,
+    headacheNote: r.headacheNote,
     healthNote: r.healthNote,
     scheduleNote: r.scheduleNote,
     generatedComment: r.generatedComment,

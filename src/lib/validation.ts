@@ -11,6 +11,14 @@ import {
   WEIGHT_PLAUSIBLE_MIN,
 } from "./constants";
 
+const headacheSeveritySchema = z.union([
+  z.literal(0),
+  z.literal(1),
+  z.literal(2),
+  z.literal(3),
+  z.literal(4),
+]);
+
 export function todayDateString(): string {
   const now = new Date();
   const year = now.getFullYear();
@@ -59,6 +67,9 @@ export const dailyRecordInputSchema = z.object({
   ]).optional(),
   painLocations: z.array(z.enum(PAIN_LOCATIONS)).optional(),
   painNote: z.string().max(TEXT_LIMITS.painNote).optional(),
+  headacheFlag: z.boolean().optional(),
+  headacheSeverity: headacheSeveritySchema.optional(),
+  headacheNote: z.string().max(TEXT_LIMITS.headacheNote).optional(),
   healthNote: z.string().max(TEXT_LIMITS.healthNote).optional(),
   scheduleNote: z.string().max(TEXT_LIMITS.scheduleNote).optional(),
 });

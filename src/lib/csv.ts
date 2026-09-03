@@ -1,5 +1,5 @@
 import { sortByDateAsc } from "./calculations";
-import { FATIGUE_LEVELS, PAIN_LEVELS } from "./constants";
+import { FATIGUE_LEVELS, HEADACHE_SEVERITIES, PAIN_LEVELS } from "./constants";
 import type { DailyRecord } from "./types";
 
 const HEADER = [
@@ -12,6 +12,9 @@ const HEADER = [
   "痛みの程度",
   "痛みの場所",
   "痛みメモ",
+  "頭痛の有無",
+  "頭痛の強さ",
+  "頭痛メモ",
   "体調メモ",
   "今日の予定",
   "コメント",
@@ -36,6 +39,11 @@ export function recordsToCsv(records: DailyRecord[]): string {
     PAIN_LEVELS.find((p) => p.value === r.painLevel)?.label ?? "",
     r.painLocations?.join("、") ?? "",
     r.painNote ?? "",
+    r.headacheFlag ? "あり" : "なし",
+    r.headacheFlag
+      ? (HEADACHE_SEVERITIES.find((h) => h.value === r.headacheSeverity)?.label ?? "")
+      : "",
+    r.headacheNote ?? "",
     r.healthNote ?? "",
     r.scheduleNote ?? "",
     r.generatedComment ?? "",

@@ -5,7 +5,12 @@ import Link from "next/link";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
 import { diffFromPrevious, sortByDateAsc } from "@/lib/calculations";
-import { formatShortDate, formatSignedNumber } from "@/lib/format";
+import {
+  formatShortDate,
+  formatSignedNumber,
+  headacheBadgeClasses,
+  headacheSeverityLabel,
+} from "@/lib/format";
 import { FATIGUE_LEVELS } from "@/lib/constants";
 import type { DailyRecord } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
@@ -169,6 +174,14 @@ export default function HistoryListPage() {
                       {fatigueLabel && <span>疲労 {fatigueLabel}</span>}
                       {record.healthNote && <span>メモあり</span>}
                     </div>
+                    {record.headacheFlag && (
+                      <span
+                        className={`mt-1 inline-flex w-fit items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${headacheBadgeClasses(record.headacheSeverity)}`}
+                      >
+                        <span aria-hidden>🤕</span>
+                        頭痛 {headacheSeverityLabel(record.headacheSeverity) || "あり"}
+                      </span>
+                    )}
                     {record.breakfastText && (
                       <p className="mt-1 truncate text-sm text-zinc-600 dark:text-zinc-400">
                         {record.breakfastText}

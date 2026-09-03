@@ -149,7 +149,7 @@ export default function HomePage() {
         </Card>
       )}
 
-      <nav className="mt-2 grid grid-cols-3 gap-3">
+      <nav className="mt-2 grid grid-cols-2 gap-3">
         <Link href="/history">
           <Button variant="secondary" className="w-full">
             記録一覧
@@ -163,6 +163,11 @@ export default function HomePage() {
         <Link href="/data">
           <Button variant="secondary" className="w-full">
             データ管理
+          </Button>
+        </Link>
+        <Link href="/help">
+          <Button variant="secondary" className="w-full">
+            ヘルプ
           </Button>
         </Link>
       </nav>
