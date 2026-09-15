@@ -62,6 +62,9 @@ export default function RecordDetailPage() {
         <p className="text-zinc-600 dark:text-zinc-300">
           この日の記録はありません。
         </p>
+        <Link href={`/record?date=${date}`} className="w-full">
+          <Button className="w-full">この日の記録を入力する</Button>
+        </Link>
         <Link href="/history" className="text-emerald-700 underline dark:text-emerald-400">
           一覧へ戻る
         </Link>
