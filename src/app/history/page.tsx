@@ -13,6 +13,7 @@ import {
 } from "@/lib/format";
 import { FATIGUE_LEVELS } from "@/lib/constants";
 import type { DailyRecord } from "@/lib/types";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
 type FilterMode =
@@ -131,7 +132,14 @@ export default function HistoryListPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-zinc-500">該当する記録がありません。</p>
+        <div className="flex flex-col gap-3">
+          <p className="text-zinc-500">該当する記録がありません。</p>
+          {filter.type === "date" && (
+            <Link href={`/record?date=${filter.value}`}>
+              <Button className="w-full">この日の記録を入力する</Button>
+            </Link>
+          )}
+        </div>
       ) : (
         <ul className="flex flex-col gap-3">
           {filtered.map((record) => {

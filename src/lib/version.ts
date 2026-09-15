@@ -1,6 +1,6 @@
 // アプリのバージョン情報。機能追加や仕様変更を行うたびに、
 // このバージョン番号・最終更新日・更新履歴を新しい値に更新する。
-export const APP_VERSION = "v1.2";
+export const APP_VERSION = "v1.3";
 export const APP_LAST_UPDATED = "2026年9月15日";
 
 export interface ChangelogEntry {
@@ -10,6 +10,11 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "v1.3",
+    date: "2026年9月15日",
+    notes: ["記録一覧の日付指定で記録がない場合に入力ボタンを追加"],
+  },
   {
     version: "v1.2",
     date: "2026年9月15日",
