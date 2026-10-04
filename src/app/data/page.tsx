@@ -20,6 +20,7 @@ import { todayDateString } from "@/lib/validation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { AutoBackupInfo } from "@/components/AutoBackupInfo";
 
 const DELETE_CONFIRM_PHRASE = "削除します";
 
@@ -131,6 +132,13 @@ export default function DataManagementPage() {
             ? formatDateTime(settings.lastBackupAt)
             : "まだバックアップしていません"}
         </p>
+      </Card>
+
+      <Card>
+        <h2 className="mb-2 text-base font-medium text-zinc-800 dark:text-zinc-100">
+          クラウド自動バックアップ
+        </h2>
+        <AutoBackupInfo />
       </Card>
 
       <Card className="flex flex-col gap-3">

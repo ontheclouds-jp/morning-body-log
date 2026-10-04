@@ -1,7 +1,7 @@
 // アプリのバージョン情報。機能追加や仕様変更を行うたびに、
 // このバージョン番号・最終更新日・更新履歴を新しい値に更新する。
-export const APP_VERSION = "v1.3";
-export const APP_LAST_UPDATED = "2026年9月15日";
+export const APP_VERSION = "v1.4";
+export const APP_LAST_UPDATED = "2026年10月4日";
 
 export interface ChangelogEntry {
   version: string;
@@ -10,6 +10,11 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "v1.4",
+    date: "2026年10月4日",
+    notes: ["クラウドへの自動バックアップ機能を追加（日付ごとの履歴ファイル付き）"],
+  },
   {
     version: "v1.3",
     date: "2026年9月15日",

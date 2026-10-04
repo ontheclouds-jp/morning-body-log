@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { AutoBackupInfo } from "@/components/AutoBackupInfo";
 import { APP_LAST_UPDATED, APP_VERSION, CHANGELOG } from "@/lib/version";
 
 interface GuideStep {
@@ -27,6 +28,10 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     title: "5. 記録の確認・修正",
     body: "「記録一覧」から過去の記録を確認できます。日付を選ぶと詳細画面が開き、内容の修正や削除ができます。",
+  },
+  {
+    title: "6. データを守るために",
+    body: "記録はクラウドへ自動でバックアップされます（下の「クラウド自動バックアップ」を参照）。あわせて「データ管理」から手動でJSONバックアップを取っておくと、より安心です。",
   },
 ];
 
@@ -61,6 +66,13 @@ export default function HelpPage() {
             </div>
           ))}
         </div>
+      </Card>
+
+      <Card>
+        <h2 className="mb-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          クラウド自動バックアップ
+        </h2>
+        <AutoBackupInfo />
       </Card>
 
       <Card>

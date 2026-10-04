@@ -1,4 +1,5 @@
 import { db } from "./db";
+import { triggerAutoBackup } from "./autoBackup";
 import { generateDailyComment } from "./comments";
 import type { DailyRecord, DailyRecordInput, DraftRecord } from "./types";
 
@@ -42,6 +43,7 @@ export async function saveRecord(
 
   await db.dailyRecords.put(record);
   await db.draftRecords.delete(input.recordDate);
+  triggerAutoBackup();
   return record;
 }
 
@@ -49,6 +51,7 @@ export async function deleteRecord(date: string): Promise<void> {
   const record = await getRecordByDate(date);
   if (record) {
     await db.dailyRecords.delete(record.id);
+    triggerAutoBackup();
   }
 }
 

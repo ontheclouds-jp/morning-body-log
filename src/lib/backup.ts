@@ -1,34 +1,8 @@
-import { z } from "zod";
 import { db } from "./db";
+import { triggerAutoBackup } from "./autoBackup";
 import { getRecordByDate } from "./records";
-import { BOWEL_CONDITIONS, PAIN_LOCATIONS } from "./constants";
+import { backupFileSchema } from "./backupSchema";
 import type { DailyRecord, FatigueLevel, HeadacheSeverity, PainLevel } from "./types";
-
-const backupRecordSchema = z.object({
-  id: z.string().optional(),
-  recordDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  weightKg: z.number().positive(),
-  bodyFatPercent: z.number().optional(),
-  breakfastText: z.string().optional(),
-  bowelCondition: z.enum(BOWEL_CONDITIONS).optional(),
-  fatigueLevel: z.number().min(1).max(5).optional(),
-  painLevel: z.number().min(0).max(3).optional(),
-  painLocations: z.array(z.enum(PAIN_LOCATIONS)).optional(),
-  painNote: z.string().optional(),
-  headacheFlag: z.boolean().optional(),
-  headacheSeverity: z.number().min(0).max(4).optional(),
-  headacheNote: z.string().optional(),
-  healthNote: z.string().optional(),
-  scheduleNote: z.string().optional(),
-  generatedComment: z.string().optional(),
-  warningFlags: z.array(z.string()).optional(),
-  createdAt: z.string().optional(),
-  updatedAt: z.string().optional(),
-});
-
-const backupFileSchema = z.object({
-  records: z.array(backupRecordSchema),
-});
 
 export interface BackupPayload {
   exportedAt: string;
@@ -101,6 +75,7 @@ export async function restoreRecords(
     await db.dailyRecords.put({ ...record, id });
     imported += 1;
   }
+  triggerAutoBackup();
   return { imported };
 }
 

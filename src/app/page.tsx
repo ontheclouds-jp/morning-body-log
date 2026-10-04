@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
+import { getLastAutoBackupAt, triggerAutoBackup } from "@/lib/autoBackup";
 import {
   getPreviousRecord,
   sevenDayAverage,
@@ -19,6 +21,14 @@ import { MiniWeightChart } from "@/components/MiniWeightChart";
 export default function HomePage() {
   const records = useLiveQuery(() => db.dailyRecords.toArray(), []);
   const today = todayDateString();
+
+  useEffect(() => {
+    // この端末でまだ自動バックアップが成功したことがなければ、
+    // 既存データをクラウドへ退避するために一度だけ実行する（0件の場合は送信しない）。
+    if (getLastAutoBackupAt() === null) {
+      triggerAutoBackup();
+    }
+  }, []);
 
   if (records === undefined) {
     return (
